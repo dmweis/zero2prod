@@ -5,12 +5,16 @@
 <span id="4">4</span>
 <span id="5">5</span>
 <span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
 </pre><div class="example-wrap"><pre class="rust ">
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">net</span>::<span class="ident">TcpListener</span>;
 <span class="kw">use</span> <span class="ident">zero2prod</span>::<span class="ident">run</span>;
 
 <span class="attribute">#[<span class="ident">actix_rt</span>::<span class="ident">main</span>]</span>
 <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">main</span>() <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="ident">run</span>()<span class="question-mark">?</span>.<span class="kw">await</span>
+    <span class="kw">let</span> <span class="ident">listener</span> <span class="op">=</span> <span class="ident">TcpListener</span>::<span class="ident">bind</span>(<span class="string">&quot;127.0.0.1:8000&quot;</span>).<span class="ident">expect</span>(<span class="string">&quot;Failed to bind to port&quot;</span>);
+    <span class="ident">run</span>(<span class="ident">listener</span>)<span class="question-mark">?</span>.<span class="kw">await</span>
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "app";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
