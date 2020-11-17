@@ -1,11 +1,13 @@
+use std::net::TcpListener;
+
 #[actix_rt::test]
 async fn healh_check_works() {
-    spawn_app();
+    let address = spawn_app();
 
     let client = reqwest::Client::new();
 
     let response = client
-        .get("http://127.0.0.1:8000/health_check")
+        .get(&format!("{}/health_check", &address))
         .send()
         .await
         .expect("Failed to execute request");
@@ -14,8 +16,11 @@ async fn healh_check_works() {
     assert_eq!(Some(0), response.content_length());
 }
 
-fn spawn_app() {
-    let server = zero2prod::run().expect("Failed to bind server");
+fn spawn_app() -> String {
+    let listener = TcpListener::bind("127.0.0.1:0").expect("Failed to bind to random port");
+    let port = listener.local_addr().unwrap().port();
+    let server = zero2prod::run(listener).expect("Failed to bind server");
 
     let _ = tokio::spawn(server);
+    format!("http://127.0.0.1:{}", port)
 }
