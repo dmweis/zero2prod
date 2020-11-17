@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["do_thing",""],["main",""]]});
+initSidebarItems({"fn":[["greet",""],["main",""]]});
