@@ -72,7 +72,7 @@ jobs:
           args: "--ignore-tests -- --test-threads 1"
 
       - name: Upload to codecov.io
-        uses: codecov/codecov-action@v1.0.15
+        uses: codecov/codecov-action@v1
         with:
           fail_ci_if_error: true
 
