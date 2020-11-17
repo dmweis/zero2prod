@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["greet",""],["main",""]]});
+initSidebarItems({"fn":[["health_check",""],["main",""]]});
