@@ -73,6 +73,8 @@ jobs:
 
       - name: Upload to codecov.io
         uses: codecov/codecov-action@v1.0.15
+        with:
+          fail_ci_if_error: true
 
       - name: Archive code coverage results
         uses: actions/upload-artifact@v1
