@@ -1,3 +1,4 @@
 var N = null;var sourcesIndex = {};
-sourcesIndex["zero2prod"] = {"name":"","files":["main.rs"]};
+sourcesIndex["app"] = {"name":"","files":["main.rs"]};
+sourcesIndex["zero2prod"] = {"name":"","files":["lib.rs"]};
 createSourceSidebar();
