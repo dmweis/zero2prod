@@ -1,5 +1,5 @@
 fn main() {
-    println!("Hello, world!");
+    println!("Hello, world! {}", do_thing());
 }
 
 fn do_thing() -> bool {
