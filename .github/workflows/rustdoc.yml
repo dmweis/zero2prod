@@ -9,7 +9,18 @@ jobs:
   release:
     name: GitHub Pages
     runs-on: ubuntu-latest
-
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v1
@@ -21,7 +32,11 @@ jobs:
           profile: minimal
           override: true
           components: rustfmt, rust-src
-
+      - name: Migrate database
+        run: |
+          sudo apt-get install libpq-dev -y
+          cargo install sqlx-cli --no-default-features --features postgres
+          SKIP_DOCKER=true ./scripts/init_db.sh
       - name: Build Documentation
         uses: actions-rs/cargo@v1
         with:
