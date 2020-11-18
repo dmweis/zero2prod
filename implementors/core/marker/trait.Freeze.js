@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["zero2prod"] = [{"text":"impl Freeze for FormData","synthetic":true,"types":[]}];
+implementors["zero2prod"] = [{"text":"impl Freeze for Settings","synthetic":true,"types":[]},{"text":"impl Freeze for DatabaseSettings","synthetic":true,"types":[]},{"text":"impl Freeze for FormData","synthetic":true,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

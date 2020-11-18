@@ -1,1 +1,1 @@
-initSidebarItems({});
+initSidebarItems({"fn":[["get_configuration",""]],"struct":[["DatabaseSettings",""],["Settings",""]]});
