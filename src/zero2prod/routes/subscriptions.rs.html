@@ -12,8 +12,29 @@
 <span id="11">11</span>
 <span id="12">12</span>
 <span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">HttpResponse</span>};
+<span class="kw">use</span> <span class="ident">chrono</span>::<span class="ident">Utc</span>;
+<span class="kw">use</span> <span class="ident">sqlx</span>::<span class="ident">PgPool</span>;
+<span class="kw">use</span> <span class="ident">uuid</span>::<span class="ident">Uuid</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">serde</span>::<span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FormData</span> {
@@ -21,10 +42,25 @@
     <span class="ident">name</span>: <span class="ident">String</span>,
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">subscribe</span>(<span class="ident">form</span>: <span class="ident">web</span>::<span class="ident">Form</span><span class="op">&lt;</span><span class="ident">FormData</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">HttpResponse</span> {
-    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">form</span>.<span class="ident">name</span>;
-    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">form</span>.<span class="ident">email</span>;
-    <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">finish</span>()
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">subscribe</span>(
+    <span class="ident">form</span>: <span class="ident">web</span>::<span class="ident">Form</span><span class="op">&lt;</span><span class="ident">FormData</span><span class="op">&gt;</span>,
+    <span class="ident">connection</span>: <span class="ident">web</span>::<span class="ident">Data</span><span class="op">&lt;</span><span class="ident">PgPool</span><span class="op">&gt;</span>,
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HttpResponse</span>, <span class="ident">HttpResponse</span><span class="op">&gt;</span> {
+    <span class="ident">sqlx</span>::<span class="macro">query</span><span class="macro">!</span>(
+        <span class="string">r#&quot;INSERT INTO subscriptions (id, email, name, subscribed_at) VALUES ($1, $2, $3, $4)&quot;#</span>,
+        <span class="ident">Uuid</span>::<span class="ident">new_v4</span>(),
+        <span class="ident">form</span>.<span class="ident">email</span>,
+        <span class="ident">form</span>.<span class="ident">name</span>,
+        <span class="ident">Utc</span>::<span class="ident">now</span>()
+    )
+    .<span class="ident">execute</span>(<span class="ident">connection</span>.<span class="ident">get_ref</span>())
+    .<span class="kw">await</span>
+    .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
+        <span class="macro">eprintln</span><span class="macro">!</span>(<span class="string">&quot;Failed to execute query: {}&quot;</span>, <span class="ident">e</span>);
+        <span class="ident">HttpResponse</span>::<span class="ident">InternalServerError</span>().<span class="ident">finish</span>()
+    })<span class="question-mark">?</span>;
+
+    <span class="prelude-val">Ok</span>(<span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>().<span class="ident">finish</span>())
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "zero2prod";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
