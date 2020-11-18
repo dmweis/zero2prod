@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["health_check",""],["run",""],["subscribe",""]],"struct":[["FormData",""]]});
+initSidebarItems({"mod":[["configuration",""],["routes",""],["startup",""]]});
