@@ -28,10 +28,12 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
+      - uses: actions-rs/install@v0.1
+        with:
+          crate: sqlx-cli
       - name: Migrate database
         run: |
           sudo apt-get install libpq-dev -y
-          cargo install sqlx-cli --no-default-features --features postgres
           SKIP_DOCKER=true ./scripts/init_db.sh
       - uses: actions-rs/cargo@v1
         with:
