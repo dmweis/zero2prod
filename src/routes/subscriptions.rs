@@ -6,6 +6,8 @@ pub struct FormData {
     name: String,
 }
 
-pub async fn subscribe(_form: web::Form<FormData>) -> HttpResponse {
+pub async fn subscribe(form: web::Form<FormData>) -> HttpResponse {
+    let _ = form.name;
+    let _ = form.email;
     HttpResponse::Ok().finish()
 }
