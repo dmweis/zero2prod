@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["configuration",""],["routes",""],["startup",""]]});
+initSidebarItems({"mod":[["configuration",""],["routes",""],["startup",""],["telemetry",""]]});

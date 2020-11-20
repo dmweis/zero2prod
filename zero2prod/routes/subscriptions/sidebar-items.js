@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["subscribe",""]],"struct":[["FormData",""]]});
+initSidebarItems({"fn":[["insert_subscriber",""],["subscribe",""]],"struct":[["FormData",""]]});

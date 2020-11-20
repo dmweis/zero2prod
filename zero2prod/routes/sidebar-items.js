@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["health_check",""],["subscribe",""]],"mod":[["health_check",""],["subscriptions",""]],"struct":[["FormData",""]]});
+initSidebarItems({"fn":[["health_check",""],["insert_subscriber",""],["subscribe",""]],"mod":[["health_check",""],["subscriptions",""]],"struct":[["FormData",""]]});
