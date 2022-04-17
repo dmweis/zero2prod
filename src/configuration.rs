@@ -22,6 +22,8 @@ pub fn get_configuration() -> Result<Settings, config::ConfigError> {
         config::File::from(configuration_directory.join(environment.as_str())).required(true),
     )?;
 
+    settings.merge(config::Environment::with_prefix("app").separator("__"))?;
+
     settings.try_into()
 }
 
