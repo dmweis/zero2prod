@@ -2,7 +2,7 @@ use tracing::{subscriber::set_global_default, Subscriber};
 use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
 use tracing_log::LogTracer;
 use tracing_subscriber::{
-    fmt::{self, MakeWriter},
+    fmt::{self, format::FmtSpan, MakeWriter},
     layer::SubscriberExt,
     EnvFilter, Layer, Registry,
 };
@@ -38,7 +38,10 @@ where
         layers.push(JsonStorageLayer.boxed());
         layers.push(bunyan_format.boxed());
     } else {
-        let compact = fmt::layer().with_writer(sink).pretty();
+        let compact = fmt::layer()
+            .with_writer(sink)
+            .with_span_events(FmtSpan::ACTIVE)
+            .pretty();
         layers.push(compact.boxed());
     }
 
