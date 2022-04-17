@@ -1,28 +1,18 @@
-use log::*;
-use simplelog::*;
+use actix_web::{web, App, HttpRequest, HttpServer, Responder};
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    CombinedLogger::init(vec![TermLogger::new(
-        LevelFilter::Info,
-        Config::default(),
-        TerminalMode::Mixed,
-        ColorChoice::Auto,
-    )])
-    .unwrap();
-
-    info!("Hello, world!");
-    info!("Or does it?");
-    info!("I guess it does!");
-    Ok(())
+async fn greet(req: HttpRequest) -> impl Responder {
+    let name = req.match_info().get("name").unwrap_or("World");
+    format!("Hello {}!", &name)
 }
 
-#[cfg(test)]
-mod test {
-    // use super::*;
-
-    #[test]
-    fn passing_test() {
-        assert_eq!(true, true);
-    }
+#[tokio::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| {
+        App::new()
+            .route("/", web::get().to(greet))
+            .route("/{name}", web::get().to(greet))
+    })
+    .bind("0.0.0.0:8000")?
+    .run()
+    .await
 }

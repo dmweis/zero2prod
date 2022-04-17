@@ -8,4 +8,4 @@ build-docker:
 
 .PHONY: run-docker
 run-docker:
-	docker run zero2prod
+	docker run -p 8000:8000 zero2prod
