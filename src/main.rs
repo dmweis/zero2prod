@@ -1,5 +1,5 @@
 use secrecy::ExposeSecret;
-use sqlx::PgPool;
+use sqlx::postgres::PgPoolOptions;
 use std::net::TcpListener;
 use tracing::info;
 use zero2prod::configuration::get_configuration;
@@ -18,9 +18,10 @@ async fn main() -> std::io::Result<()> {
     );
     init_subscriber(subscriber);
 
-    let connection_pool =
-        PgPool::connect_lazy(configuration.database.connection_string().expose_secret())
-            .expect("Failed to create Postgres connection pool.");
+    let connection_pool = PgPoolOptions::new()
+        .connect_timeout(std::time::Duration::from_secs(2))
+        .connect_lazy(configuration.database.connection_string().expose_secret())
+        .expect("Failed to create Postgres connection pool.");
 
     let address = format!(
         "{}:{}",
