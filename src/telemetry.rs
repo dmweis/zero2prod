@@ -38,13 +38,7 @@ where
         layers.push(JsonStorageLayer.boxed());
         layers.push(bunyan_format.boxed());
     } else {
-        let compact = fmt::layer()
-            .with_level(true) // don't include levels in formatted output
-            .with_target(true) // don't include targets
-            .with_thread_ids(true) // include the thread ID of the current thread
-            .with_thread_names(true) // include the name of the current thread
-            .with_writer(sink)
-            .compact(); // use the `Compact` formatting style.
+        let compact = fmt::layer().with_writer(sink).pretty();
         layers.push(compact.boxed());
     }
 
