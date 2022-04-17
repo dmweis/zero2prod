@@ -9,6 +9,8 @@ pub fn get_configuration() -> Result<Settings, config::ConfigError> {
 pub struct Settings {
     pub database: DatabaseSettings,
     pub application_port: u16,
+    #[serde(default)]
+    pub logging_settings: LoggingSettings,
 }
 #[derive(serde::Deserialize)]
 pub struct DatabaseSettings {
@@ -17,6 +19,14 @@ pub struct DatabaseSettings {
     pub port: u16,
     pub host: String,
     pub database_name: String,
+}
+
+#[derive(serde::Deserialize, Default)]
+pub struct LoggingSettings {
+    #[serde(default)]
+    pub log_bunyan: bool,
+    #[serde(default)]
+    pub log_path: Option<String>,
 }
 
 impl DatabaseSettings {

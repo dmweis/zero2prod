@@ -1,23 +1,54 @@
 use tracing::{subscriber::set_global_default, Subscriber};
 use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
 use tracing_log::LogTracer;
-use tracing_subscriber::{fmt::MakeWriter, layer::SubscriberExt, EnvFilter, Registry};
+use tracing_subscriber::{
+    fmt::{self, MakeWriter},
+    layer::SubscriberExt,
+    EnvFilter, Layer, Registry,
+};
+
+use crate::configuration::LoggingSettings;
 
 pub fn get_subscriber<Sink>(
     name: String,
     env_filter: String,
     sink: Sink,
+    settings: &LoggingSettings,
 ) -> impl Subscriber + Send + Sync
 where
     Sink: for<'a> MakeWriter<'a> + Send + Sync + 'static,
 {
     let env_filter =
         EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new(env_filter));
-    let formatting_layer = BunyanFormattingLayer::new(name, sink);
-    Registry::default()
-        .with(env_filter)
-        .with(JsonStorageLayer)
-        .with(formatting_layer)
+
+    let mut layers = vec![];
+
+    if let Some(ref path) = settings.log_path {
+        let file = std::fs::File::options()
+            .append(true)
+            .create(true)
+            .open(path)
+            .unwrap();
+        let bunyan_format = BunyanFormattingLayer::new(name.clone(), file);
+        layers.push(bunyan_format.boxed());
+    }
+
+    if settings.log_bunyan {
+        let bunyan_format = BunyanFormattingLayer::new(name, sink);
+        layers.push(JsonStorageLayer.boxed());
+        layers.push(bunyan_format.boxed());
+    } else {
+        let compact = fmt::layer()
+            .with_level(true) // don't include levels in formatted output
+            .with_target(true) // don't include targets
+            .with_thread_ids(true) // include the thread ID of the current thread
+            .with_thread_names(true) // include the name of the current thread
+            .with_writer(sink)
+            .compact(); // use the `Compact` formatting style.
+        layers.push(compact.boxed());
+    }
+
+    Registry::default().with(env_filter).with(layers)
 }
 
 pub fn init_subscriber(subscriber: impl Subscriber + Send + Sync) {

@@ -6,10 +6,16 @@ use zero2prod::telemetry::{get_subscriber, init_subscriber};
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
-    let subscriber = get_subscriber("zero2prod".into(), "info".into(), std::io::stdout);
+    let configuration = get_configuration().expect("Failed to read configuration.");
+
+    let subscriber = get_subscriber(
+        "zero2prod".into(),
+        "info".into(),
+        std::io::stdout,
+        &configuration.logging_settings,
+    );
     init_subscriber(subscriber);
 
-    let configuration = get_configuration().expect("Failed to read configuration.");
     let connection_pool = PgPool::connect(&configuration.database.connection_string())
         .await
         .expect("Failed to connect to Postgres.");
