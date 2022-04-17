@@ -1,0 +1,14 @@
+.env
+.git
+
+target/
+tests/
+Dockerfile
+scripts/
+migrations/
+
+README.md
+.gitignore
+LICENSE-APACHE
+LICENSE-MIT
+Makefile
