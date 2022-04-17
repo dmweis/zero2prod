@@ -17,7 +17,6 @@ COPY --from=planner /app/recipe.json recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json
 COPY . .
 RUN cargo build --release
-RUN cargo test --all --release
 
 # light runtime
 FROM debian:bullseye-slim AS runtime
