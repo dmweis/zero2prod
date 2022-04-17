@@ -4,6 +4,7 @@ pub fn get_configuration() -> Result<Settings, config::ConfigError> {
     settings.merge(config::File::with_name("configuration"))?;
     settings.try_into()
 }
+
 #[derive(serde::Deserialize)]
 pub struct Settings {
     pub database: DatabaseSettings,
@@ -16,4 +17,13 @@ pub struct DatabaseSettings {
     pub port: u16,
     pub host: String,
     pub database_name: String,
+}
+
+impl DatabaseSettings {
+    pub fn connection_string(&self) -> String {
+        format!(
+            "postgres://{}:{}@{}:{}/{}",
+            self.username, self.password, self.host, self.port, self.database_name
+        )
+    }
 }
