@@ -16,10 +16,6 @@ FROM chef as builder
 COPY --from=planner /app/recipe.json recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json
 COPY . .
-# Excessive cargo checks because I can
-RUN cargo check
-RUN cargo fmt --check
-RUN cargo clippy
 RUN cargo build --release
 RUN cargo test --all --release
 
