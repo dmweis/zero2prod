@@ -50,11 +50,11 @@ impl TestApp {
 pub async fn spawn_app() -> TestApp {
     Lazy::force(&TRACING);
 
-    // Randomise configuration to ensure test isolation
+    // Randomize configuration to ensure test isolation
     let configuration = {
         let mut c = get_configuration().expect("Failed to read configuration.");
         // Use a different database for each test case
-        c.database.database_name = Uuid::new_v4().to_string();
+        c.database.database_name = format!("TestDB-{}", Uuid::new_v4());
         // Use a random OS port
         c.application.port = 0;
         c
