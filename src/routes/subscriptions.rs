@@ -30,7 +30,7 @@ pub async fn subscribe(form: web::Form<FormData>, pool: web::Data<PgPool>) -> Ht
     skip(form, pool)
 )]
 pub async fn insert_subscriber(pool: &PgPool, form: &FormData) -> Result<(), sqlx::Error> {
-    sqlx::query!(
+    match sqlx::query!(
         r#"
     INSERT INTO subscriptions (id, email, name, subscribed_at)
     VALUES ($1, $2, $3, $4)
@@ -42,12 +42,17 @@ pub async fn insert_subscriber(pool: &PgPool, form: &FormData) -> Result<(), sql
     )
     .execute(pool)
     .await
-    .map_err(|e| {
-        tracing::error!("Failed to execute query: {:?}", e);
-        e
-        // Using the `?` operator to return early
-        // if the function failed, returning a sqlx::Error
-        // We will talk about error handling in depth later!
-    })?;
-    Ok(())
+    {
+        Ok(res) => {
+            tracing::info!(
+                rows_affected = res.rows_affected(),
+                "User saved in database",
+            );
+            Ok(())
+        }
+        Err(e) => {
+            tracing::error!("Failed to execute query: {:?}", e);
+            Err(e)
+        }
+    }
 }
