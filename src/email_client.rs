@@ -176,6 +176,8 @@ mod tests {
 
     #[tokio::test]
     async fn send_email_times_out_if_the_server_takes_too_long() {
+        // TODO(David): I hate timeout tests :/
+
         // Arrange
         let mock_server = MockServer::start().await;
         let sender = SubscriberEmail::parse(SafeEmail().fake()).unwrap();
