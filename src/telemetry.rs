@@ -40,7 +40,7 @@ where
     } else {
         let compact = fmt::layer()
             .with_writer(sink)
-            .with_span_events(FmtSpan::ACTIVE)
+            .with_span_events(FmtSpan::ENTER)
             .pretty();
         layers.push(compact.boxed());
     }
