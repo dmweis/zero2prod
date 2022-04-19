@@ -38,9 +38,7 @@ where
         layers.push(JsonStorageLayer.boxed());
         layers.push(bunyan_format.boxed());
     } else {
-        let compact = fmt::layer()
-            .with_writer(sink)
-            .with_span_events(FmtSpan::ENTER);
+        let compact = fmt::layer().with_writer(sink);
         layers.push(compact.boxed());
     }
 
