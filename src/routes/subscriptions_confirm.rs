@@ -30,17 +30,22 @@ pub async fn confirm(parameters: web::Query<Parameters>, pool: web::Data<PgPool>
 
 #[tracing::instrument(name = "Mark subscriber as confirmed", skip(subscriber_id, pool))]
 pub async fn confirm_subscriber(pool: &PgPool, subscriber_id: Uuid) -> Result<(), sqlx::Error> {
-    sqlx::query!(
+    match sqlx::query!(
         r#"UPDATE subscriptions SET status = 'confirmed' WHERE id = $1"#,
         subscriber_id,
     )
     .execute(pool)
     .await
-    .map_err(|e| {
-        tracing::error!("Failed to execute query: {:?}", e);
-        e
-    })?;
-    Ok(())
+    {
+        Ok(_) => {
+            tracing::info!("Subscriber status set as confirmed");
+            Ok(())
+        }
+        Err(e) => {
+            tracing::error!("Failed to execute query: {:?}", e);
+            Err(e)
+        }
+    }
 }
 
 #[tracing::instrument(name = "Get subscriber_id from token", skip(subscription_token, pool))]
