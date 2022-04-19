@@ -1,6 +1,6 @@
 .PHONY: watch
 watch:
-	cargo watch -x check -x test -x run
+	cargo watch -x check -x "fmt --check" -x "clippy -- -D warnings" -x test -x run
 
 .PHONY: build-docker
 build-docker:
