@@ -6,4 +6,4 @@ email_client:
   base_url: "https://api.postmarkapp.com"
   sender_email: "something@gmail.com"
 logging_settings:
-  log_bunyan: true
+  log_bunyan: false
