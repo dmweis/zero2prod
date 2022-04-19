@@ -2,7 +2,7 @@ use tracing::{subscriber::set_global_default, Subscriber};
 use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
 use tracing_log::LogTracer;
 use tracing_subscriber::{
-    fmt::{self, format::FmtSpan, MakeWriter},
+    fmt::{self, MakeWriter},
     layer::SubscriberExt,
     EnvFilter, Layer, Registry,
 };
