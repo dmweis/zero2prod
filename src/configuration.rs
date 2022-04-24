@@ -78,6 +78,8 @@ pub struct EmailClientSettings {
     pub sender_email: String,
     pub authorization_token: Secret<String>,
     pub timeout_milliseconds: u64,
+    #[serde(default)]
+    pub mock_emails: bool,
 }
 
 impl EmailClientSettings {

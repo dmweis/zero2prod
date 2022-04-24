@@ -7,6 +7,7 @@ pub struct EmailClient {
     base_url: String,
     sender: SubscriberEmail,
     authorization_token: Secret<String>,
+    mock_emails: bool,
 }
 
 impl EmailClient {
@@ -15,6 +16,7 @@ impl EmailClient {
         sender: SubscriberEmail,
         authorization_token: Secret<String>,
         timeout: std::time::Duration,
+        mock_emails: bool,
     ) -> Self {
         let http_client = Client::builder().timeout(timeout).build().unwrap();
         Self {
@@ -22,6 +24,7 @@ impl EmailClient {
             base_url,
             sender,
             authorization_token,
+            mock_emails,
         }
     }
 
@@ -42,16 +45,20 @@ impl EmailClient {
             html_body: html_content,
             text_body: text_content,
         };
-        self.http_client
-            .post(&url)
-            .header(
-                "X-Postmark-Server-Token",
-                self.authorization_token.expose_secret(),
-            )
-            .json(&request_body)
-            .send()
-            .await?
-            .error_for_status()?;
+        if self.mock_emails {
+            tracing::info!("Mock emails is on. Not sending {}", text_content);
+        } else {
+            self.http_client
+                .post(&url)
+                .header(
+                    "X-Postmark-Server-Token",
+                    self.authorization_token.expose_secret(),
+                )
+                .json(&request_body)
+                .send()
+                .await?
+                .error_for_status()?;
+        }
         Ok(())
     }
 }
@@ -118,6 +125,7 @@ mod tests {
             email(),
             Secret::new(Faker.fake()),
             std::time::Duration::from_millis(200),
+            false,
         )
     }
 

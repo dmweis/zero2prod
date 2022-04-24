@@ -57,12 +57,14 @@ impl Application {
             .sender()
             .expect("Invalid sender email address.");
         let timeout = configuration.email_client.timeout();
+        let mock_emails = configuration.email_client.mock_emails;
 
         let email_client = EmailClient::new(
             configuration.email_client.base_url,
             sender_email,
             configuration.email_client.authorization_token,
             timeout,
+            mock_emails,
         );
         let address = format!(
             "{}:{}",

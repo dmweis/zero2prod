@@ -90,6 +90,7 @@ pub async fn spawn_app() -> TestApp {
         c.application.port = 0;
         // Use the mock server as email API
         c.email_client.base_url = email_server.uri();
+        c.email_client.mock_emails = false;
         c
     };
     // Create and migrate the database
