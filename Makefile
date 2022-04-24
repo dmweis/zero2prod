@@ -7,5 +7,5 @@ build-docker:
 	docker build --tag zero2prod --file Dockerfile .
 
 .PHONY: run-docker
-run-docker:
-	docker run -p 8000:8000 zero2prod
+run-docker: build-docker
+	docker run -e APP_ENVIRONMENT=local -e APP_APPLICATION__HOST=0.0.0.0 -p 8000:8000 zero2prod
