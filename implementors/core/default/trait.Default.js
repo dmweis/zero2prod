@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["zero2prod"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.63.0/core/default/trait.Default.html\" title=\"trait core::default::Default\">Default</a> for <a class=\"struct\" href=\"zero2prod/configuration/struct.LoggingSettings.html\" title=\"struct zero2prod::configuration::LoggingSettings\">LoggingSettings</a>","synthetic":false,"types":["zero2prod::configuration::LoggingSettings"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

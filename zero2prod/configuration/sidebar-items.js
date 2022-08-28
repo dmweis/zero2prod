@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["Environment","The possible runtime environment for our application."]],"fn":[["get_configuration",""]],"struct":[["ApplicationSettings",""],["DatabaseSettings",""],["EmailClientSettings",""],["LoggingSettings",""],["Settings",""]]};
